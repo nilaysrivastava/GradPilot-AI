@@ -122,7 +122,7 @@ export default function HomePage() {
     <main className="page-shell min-h-screen overflow-hidden">
       <GlobalTopbar pageTitle="Home" />
 
-      <section className="relative px-4 pb-20 pt-32 sm:px-6 lg:px-8 lg:pb-28 lg:pt-40">
+      <section className="relative px-4 pb-20 pt-32 sm:px-6 lg:px-8 lg:pb-28 lg:pt-10">
         <div className="container-xl relative">
           <div className="absolute -right-20 top-0 hidden size-72 rounded-full bg-violet-200/40 blur-3xl lg:block" />
           <div className="absolute -left-20 top-40 hidden size-72 rounded-full bg-blue-200/40 blur-3xl lg:block" />

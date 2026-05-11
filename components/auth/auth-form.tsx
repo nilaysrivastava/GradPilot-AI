@@ -32,7 +32,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const isSignup = mode === "signup";
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(isSignup ? "" : "shreya@gradpilot.ai");
+  const [email, setEmail] = useState(isSignup ? "" : "nilay@gradpilot.ai");
   const [password, setPassword] = useState(isSignup ? "" : "gradpilot123");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -291,7 +291,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             {!isSignup ? (
               <div className="mt-6 rounded-3xl bg-violet-50 p-4 text-sm text-slate-600">
                 <p className="font-semibold text-violet-700">Demo login</p>
-                <p className="mt-1">Email: shreya@gradpilot.ai</p>
+                <p className="mt-1">Email: nilay@gradpilot.ai</p>
                 <p>Password: gradpilot123</p>
               </div>
             ) : null}
