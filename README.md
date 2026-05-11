@@ -4,6 +4,8 @@
 
 GradPilot AI is an AI-first web platform for Indian students planning higher education in India or abroad. It helps students move from university discovery to application planning and education loan readiness through one personalized ecosystem.
 
+Live Demo link: grad-pilot-ai.vercel.app
+
 The platform is built around the journey:
 
 **Awareness → Engagement → Trust → Loan Conversion**
