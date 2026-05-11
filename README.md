@@ -10,7 +10,7 @@ The platform is built around the journey:
 
 ## Live Demo
 
-[Click here to view the deployed prototype](https://your-vercel-link.vercel.app
+[Click here to view the deployed prototype](https://your-vercel-link.vercel.app)
 
 ---
 
