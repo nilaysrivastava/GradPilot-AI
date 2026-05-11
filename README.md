@@ -141,6 +141,8 @@ It supports conversion by:
 This repo includes functional frontend screens, backend API routes, simulated intelligence engines, and a complete end-to-end student journey.
 This is a working hackathon prototype with simulated intelligence and mock data. It is designed to demonstrate the full product flow without requiring paid external APIs.
 
+## The current prototype uses mock API routes and in-memory data to simulate authentication, student profile persistence, recommendation engines, loan readiness, analytics, and decision intelligence. It is designed to demonstrate the full product flow and can be connected to a real database in the next production phase.
+
 
 GradPilot AI
 Built with love 💜 by Team_Scoobaa.
