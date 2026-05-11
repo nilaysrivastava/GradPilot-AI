@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   LayoutDashboard,
@@ -31,8 +31,13 @@ export function GlobalTopbar({
 }: GlobalTopbarProps) {
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const topbarShellRef = useRef<HTMLDivElement | null>(null);
 
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [topbarBounds, setTopbarBounds] = useState({
+    left: 0,
+    width: 0,
+  });
 
   const { session, logout } = useAuthStore();
   const clearProfile = useProfileStore((state) => state.clearProfile);
@@ -46,6 +51,39 @@ export function GlobalTopbar({
       .join("")
       .slice(0, 2)
       .toUpperCase() || "GP";
+
+  useLayoutEffect(() => {
+    function updateTopbarBounds() {
+      if (!topbarShellRef.current) return;
+
+      const rect = topbarShellRef.current.getBoundingClientRect();
+
+      setTopbarBounds({
+        left: rect.left,
+        width: rect.width,
+      });
+    }
+
+    updateTopbarBounds();
+
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(updateTopbarBounds)
+        : null;
+
+    if (topbarShellRef.current && resizeObserver) {
+      resizeObserver.observe(topbarShellRef.current);
+    }
+
+    window.addEventListener("resize", updateTopbarBounds);
+    window.addEventListener("orientationchange", updateTopbarBounds);
+
+    return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", updateTopbarBounds);
+      window.removeEventListener("orientationchange", updateTopbarBounds);
+    };
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -88,166 +126,174 @@ export function GlobalTopbar({
   }
 
   return (
-    <header className="sticky top-4 z-[5000] mb-8 w-full px-3 sm:px-5 lg:px-2">
-      <div className="mx-auto flex h-16 w-full items-center justify-between gap-4 rounded-full border border-white/60 bg-white/55 px-4 shadow-[0_20px_70px_rgba(88,28,135,0.18)] ring-1 ring-violet-100/60 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/45 sm:px-5">
-        <div className="flex min-w-0 items-center gap-3">
-          {showMenuButton ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={onOpenSidebar}
-              className="size-10 rounded-full border-white/70 bg-white/60 shadow-sm backdrop-blur-xl hover:bg-white/80 lg:hidden"
-            >
-              <Menu className="size-5" />
-            </Button>
-          ) : null}
-
-          <Link
-            href="/"
-            className="flex min-w-0 items-center gap-3 rounded-full pr-2 transition hover:opacity-90"
-          >
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-blue-500 text-white shadow-glow">
-              <Sparkles className="size-5" />
-            </div>
-
-            <div className="hidden min-w-0 sm:block">
-              <p className="truncate text-base font-bold tracking-tight text-slate-950">
-                GradPilot AI
-              </p>
-              <p className="-mt-1 truncate text-xs font-medium text-slate-500">
-                Student financing intelligence
-              </p>
-            </div>
-          </Link>
-
-          <div className="ml-2 hidden h-8 w-px bg-violet-100/80 xl:block" />
-
-          <div className="hidden min-w-0 xl:block">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-violet-600">
-              Workspace
-            </p>
-            <h1 className="-mt-0.5 truncate text-base font-semibold tracking-tight text-slate-950">
-              {pageTitle}
-            </h1>
-          </div>
-        </div>
-
-        <nav className="flex shrink-0 items-center gap-2">
-          {isLoggedIn ? (
-            <>
-              <Button
-                asChild
-                variant="outline"
-                className="hidden h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80 sm:inline-flex"
-              >
-                <Link href="/dashboard">
-                  <LayoutDashboard className="mr-2 size-4" />
-                  Dashboard
-                </Link>
-              </Button>
-
+    <div ref={topbarShellRef} className="mb-8 h-20 w-full px-3 sm:px-5 lg:px-2">
+      <header
+        className="fixed top-4 z-[5000]"
+        style={{
+          left: topbarBounds.left,
+          width: topbarBounds.width,
+        }}
+      >
+        <div className="mx-auto flex h-16 w-full items-center justify-between gap-4 rounded-full border border-white/60 bg-white/55 px-4 shadow-[0_20px_70px_rgba(88,28,135,0.18)] ring-1 ring-violet-100/60 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/45 sm:px-5">
+          <div className="flex min-w-0 items-center gap-3">
+            {showMenuButton ? (
               <Button
                 type="button"
-                onClick={handleLogout}
                 variant="outline"
-                className="hidden h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80 lg:inline-flex"
+                size="icon"
+                onClick={onOpenSidebar}
+                className="size-10 rounded-full border-white/70 bg-white/60 shadow-sm backdrop-blur-xl hover:bg-white/80 lg:hidden"
               >
-                <LogOut className="mr-2 size-4" />
-                Logout
+                <Menu className="size-5" />
               </Button>
+            ) : null}
 
-              <div ref={menuRef} className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsProfileMenuOpen((current) => !current)}
-                  className="flex h-11 items-center gap-3 rounded-full border border-white/70 bg-white/60 px-2 pr-3 text-left shadow-sm backdrop-blur-xl transition hover:bg-white/80"
+            <Link
+              href="/"
+              className="flex min-w-0 items-center gap-3 rounded-full pr-2 transition hover:opacity-90"
+            >
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-blue-500 text-white shadow-glow">
+                <Sparkles className="size-5" />
+              </div>
+
+              <div className="hidden min-w-0 sm:block">
+                <p className="truncate text-base font-bold tracking-tight text-slate-950">
+                  GradPilot AI
+                </p>
+                <p className="-mt-1 truncate text-xs font-medium text-slate-500">
+                  Student financing intelligence
+                </p>
+              </div>
+            </Link>
+
+            <div className="ml-2 hidden h-8 w-px bg-violet-100/80 xl:block" />
+
+            <div className="hidden min-w-0 xl:block">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-violet-600">
+                Workspace
+              </p>
+              <h1 className="-mt-0.5 truncate text-base font-semibold tracking-tight text-slate-950">
+                {pageTitle}
+              </h1>
+            </div>
+          </div>
+
+          <nav className="flex shrink-0 items-center gap-2">
+            {isLoggedIn ? (
+              <>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="hidden h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80 sm:inline-flex"
                 >
-                  <Avatar className="size-8">
-                    <AvatarFallback className="bg-violet-100 text-xs font-bold text-violet-700">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
+                  <Link href="/dashboard">
+                    <LayoutDashboard className="mr-2 size-4" />
+                    Dashboard
+                  </Link>
+                </Button>
 
-                  <div className="hidden max-w-36 text-left md:block">
-                    <p className="truncate text-sm font-semibold text-slate-950">
-                      {session?.user.name}
-                    </p>
-                    <p className="truncate text-xs text-slate-500">
-                      {session?.user.email}
-                    </p>
-                  </div>
+                <Button
+                  type="button"
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="hidden h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80 lg:inline-flex"
+                >
+                  <LogOut className="mr-2 size-4" />
+                  Logout
+                </Button>
 
-                  <ChevronDown
-                    className={`size-4 text-slate-400 transition ${
-                      isProfileMenuOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
+                <div ref={menuRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsProfileMenuOpen((current) => !current)}
+                    className="flex h-11 items-center gap-3 rounded-full border border-white/70 bg-white/60 px-2 pr-3 text-left shadow-sm backdrop-blur-xl transition hover:bg-white/80"
+                  >
+                    <Avatar className="size-8">
+                      <AvatarFallback className="bg-violet-100 text-xs font-bold text-violet-700">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
 
-                {isProfileMenuOpen ? (
-                  <div className="absolute right-0 top-14 z-[99999] w-72 overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/80 shadow-[0_20px_70px_rgba(88,28,135,0.18)] backdrop-blur-2xl">
-                    <div className="border-b border-violet-100/80 bg-violet-50/60 p-4">
-                      <p className="font-semibold text-slate-950">
+                    <div className="hidden max-w-36 text-left md:block">
+                      <p className="truncate text-sm font-semibold text-slate-950">
                         {session?.user.name}
                       </p>
-                      <p className="mt-1 truncate text-xs text-slate-500">
+                      <p className="truncate text-xs text-slate-500">
                         {session?.user.email}
                       </p>
                     </div>
 
-                    <div className="p-2">
-                      <Link
-                        href="/profile"
-                        onClick={() => setIsProfileMenuOpen(false)}
-                        className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
-                      >
-                        <UserCircle className="size-4" />
-                        Profile
-                      </Link>
+                    <ChevronDown
+                      className={`size-4 text-slate-400 transition ${
+                        isProfileMenuOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsProfileMenuOpen(false)}
-                        className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
-                      >
-                        <LayoutDashboard className="size-4" />
-                        Dashboard
-                      </Link>
+                  {isProfileMenuOpen ? (
+                    <div className="absolute right-0 top-14 z-[99999] w-72 overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/80 shadow-[0_20px_70px_rgba(88,28,135,0.18)] backdrop-blur-2xl">
+                      <div className="border-b border-violet-100/80 bg-violet-50/60 p-4">
+                        <p className="font-semibold text-slate-950">
+                          {session?.user.name}
+                        </p>
+                        <p className="mt-1 truncate text-xs text-slate-500">
+                          {session?.user.email}
+                        </p>
+                      </div>
 
-                      <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50"
-                      >
-                        <LogOut className="size-4" />
-                        Logout
-                      </button>
+                      <div className="p-2">
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                          className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
+                        >
+                          <UserCircle className="size-4" />
+                          Profile
+                        </Link>
+
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                          className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
+                        >
+                          <LayoutDashboard className="size-4" />
+                          Dashboard
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50"
+                        >
+                          <LogOut className="size-4" />
+                          Logout
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ) : null}
-              </div>
-            </>
-          ) : (
-            <>
-              <Button
-                asChild
-                variant="outline"
-                className="h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80"
-              >
-                <Link href="/login">
-                  <LogIn className="mr-2 size-4" />
-                  Login
-                </Link>
-              </Button>
+                  ) : null}
+                </div>
+              </>
+            ) : (
+              <>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80"
+                >
+                  <Link href="/login">
+                    <LogIn className="mr-2 size-4" />
+                    Login
+                  </Link>
+                </Button>
 
-              <Button asChild className="h-10 rounded-full px-4 shadow-glow">
-                <Link href="/signup">Sign up</Link>
-              </Button>
-            </>
-          )}
-        </nav>
-      </div>
-    </header>
+                <Button asChild className="h-10 rounded-full px-4 shadow-glow">
+                  <Link href="/signup">Sign up</Link>
+                </Button>
+              </>
+            )}
+          </nav>
+        </div>
+      </header>
+    </div>
   );
 }
