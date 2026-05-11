@@ -319,7 +319,7 @@ export default function MentorPage() {
             </div>
 
             <div className="rounded-[2rem] border border-violet-100 bg-slate-950 p-6 text-white shadow-sm">
-              <p className="font-semibold">Demo talking point</p>
+              
               <p className="mt-3 text-sm leading-6 text-slate-300">
                 This chatbot is not generic. It pulls from the same profile,
                 ROI, admission, timeline, and decision engines used across the

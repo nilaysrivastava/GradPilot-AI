@@ -67,7 +67,9 @@ function clamp(value: number, min = 0, max = 100) {
 
 function average(values: number[]) {
   if (values.length === 0) return 0;
-  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
+  return Math.round(
+    values.reduce((sum, value) => sum + value, 0) / values.length
+  );
 }
 
 function getPreferenceBonus(country: Country, profile: StudentProfile) {
@@ -81,7 +83,10 @@ function getPreferenceBonus(country: Country, profile: StudentProfile) {
   return 0;
 }
 
-function getCountryFitScore(university: UniversityData, profile: StudentProfile) {
+function getCountryFitScore(
+  university: UniversityData,
+  profile: StudentProfile
+) {
   let score = 42;
 
   score += getPreferenceBonus(university.country, profile);
@@ -89,7 +94,10 @@ function getCountryFitScore(university: UniversityData, profile: StudentProfile)
   score += university.prOpportunity * 0.18;
   score += university.scholarshipChance * 0.08;
 
-  if (university.country === "Germany" && profile.riskPreference === "Conservative") {
+  if (
+    university.country === "Germany" &&
+    profile.riskPreference === "Conservative"
+  ) {
     score += 8;
   }
 
@@ -97,7 +105,10 @@ function getCountryFitScore(university: UniversityData, profile: StudentProfile)
     score += 8;
   }
 
-  if (university.country === "Canada" && profile.riskPreference === "Balanced") {
+  if (
+    university.country === "Canada" &&
+    profile.riskPreference === "Balanced"
+  ) {
     score += 8;
   }
 
@@ -137,14 +148,22 @@ function getLoanReadinessScore(
   return clamp(Math.round(score));
 }
 
-function getOpportunityScore(university: UniversityData, roiScenario: RoiScenario) {
+function getOpportunityScore(
+  university: UniversityData,
+  roiScenario: RoiScenario
+) {
   let score = 0;
 
   score += university.careerDemand * 0.38;
   score += university.prOpportunity * 0.22;
   score += university.visaFriendliness * 0.14;
   score += university.scholarshipChance * 0.1;
-  score += roiScenario.salaryToCostRatio >= 1.5 ? 16 : roiScenario.salaryToCostRatio >= 1 ? 10 : 5;
+  score +=
+    roiScenario.salaryToCostRatio >= 1.5
+      ? 16
+      : roiScenario.salaryToCostRatio >= 1
+      ? 10
+      : 5;
 
   return clamp(Math.round(score));
 }
@@ -175,7 +194,9 @@ function getRiskScore(
   return clamp(Math.round(risk));
 }
 
-function getDecisionLabel(option: Omit<DecisionOption, "decisionLabel">): DecisionLabel {
+function getDecisionLabel(
+  option: Omit<DecisionOption, "decisionLabel">
+): DecisionLabel {
   if (option.finalScore >= 82) return "Best Overall";
   if (option.roiScore >= 82 && option.riskScore <= 55) return "High ROI";
   if (option.admissionProbability >= 78) return "Safer Admit";
@@ -194,7 +215,9 @@ function buildStrengths(
   const strengths: string[] = [];
 
   if (admissionProbability >= 72) {
-    strengths.push("Admission probability is relatively strong for your profile.");
+    strengths.push(
+      "Admission probability is relatively strong for your profile."
+    );
   }
 
   if (roiScenario.roiScore >= 75) {
@@ -206,7 +229,9 @@ function buildStrengths(
   }
 
   if (countryFitScore >= 75) {
-    strengths.push(`${university.country} aligns well with your country preferences and journey goals.`);
+    strengths.push(
+      `${university.country} aligns well with your country preferences and journey goals.`
+    );
   }
 
   if (opportunityScore >= 78) {
@@ -214,7 +239,9 @@ function buildStrengths(
   }
 
   if (strengths.length === 0) {
-    strengths.push("This option is possible but needs careful planning before finalizing.");
+    strengths.push(
+      "This option is possible but needs careful planning before finalizing."
+    );
   }
 
   return strengths.slice(0, 4);
@@ -230,7 +257,9 @@ function buildRisks(
   const risks: string[] = [];
 
   if (admissionProbability < 55) {
-    risks.push("Admission probability is low, so this should be treated as an ambitious option.");
+    risks.push(
+      "Admission probability is low, so this should be treated as an ambitious option."
+    );
   }
 
   if (roiScenario.totalCostLakhs > profile.budgetLakhs) {
@@ -242,7 +271,9 @@ function buildRisks(
   }
 
   if (profile.needsLoan && !profile.hasCoApplicant) {
-    risks.push("Missing co-applicant support may reduce loan approval confidence.");
+    risks.push(
+      "Missing co-applicant support may reduce loan approval confidence."
+    );
   }
 
   if (university.visaFriendliness < 70) {
@@ -250,7 +281,9 @@ function buildRisks(
   }
 
   if (riskScore <= 40) {
-    risks.push("No major risk detected, but final choice should still be checked against deadlines and documents.");
+    risks.push(
+      "No major risk detected, but final choice should still be checked against deadlines and documents."
+    );
   }
 
   return risks.slice(0, 4);
@@ -267,7 +300,11 @@ function buildDecisionOption(
   const roiScenario = roiResult.selectedScenario;
 
   const countryFitScore = getCountryFitScore(university, profile);
-  const loanReadinessScore = getLoanReadinessScore(university, profile, roiScenario);
+  const loanReadinessScore = getLoanReadinessScore(
+    university,
+    profile,
+    roiScenario
+  );
   const opportunityScore = getOpportunityScore(university, roiScenario);
   const riskScore = getRiskScore(
     university,
@@ -326,7 +363,13 @@ function buildDecisionOption(
 
   const decisionLabel = getDecisionLabel(optionWithoutLabel);
 
-  const recommendation = `${university.name} is a ${decisionLabel.toLowerCase()} option with ${finalScore}% final decision score, ${prediction.probability}% admission probability, ${roiScenario.roiScore}% ROI score, and ${loanReadinessScore}% loan readiness.`;
+  const recommendation = `${
+    university.name
+  } is a ${decisionLabel.toLowerCase()} option with ${finalScore}% final decision score, ${
+    prediction.probability
+  }% admission probability, ${
+    roiScenario.roiScore
+  }% ROI score, and ${loanReadinessScore}% loan readiness.`;
 
   return {
     ...optionWithoutLabel,
@@ -335,7 +378,9 @@ function buildDecisionOption(
   };
 }
 
-function buildCountryInsights(options: DecisionOption[]): CountryDecisionInsight[] {
+function buildCountryInsights(
+  options: DecisionOption[]
+): CountryDecisionInsight[] {
   const countryMap = new Map<Country, DecisionOption[]>();
 
   options.forEach((option) => {
@@ -347,25 +392,38 @@ function buildCountryInsights(options: DecisionOption[]): CountryDecisionInsight
   return Array.from(countryMap.entries())
     .map(([country, items]) => {
       const decisionScore = average(items.map((item) => item.finalScore));
-      const averageCostLakhs = average(items.map((item) => item.totalCostLakhs));
-      const averageSalaryLakhs = average(items.map((item) => item.expectedSalaryLakhs));
-      const averageAdmission = average(items.map((item) => item.admissionProbability));
+      const averageCostLakhs = average(
+        items.map((item) => item.totalCostLakhs)
+      );
+      const averageSalaryLakhs = average(
+        items.map((item) => item.expectedSalaryLakhs)
+      );
+      const averageAdmission = average(
+        items.map((item) => item.admissionProbability)
+      );
       const averageRoi = average(items.map((item) => item.roiScore));
-      const bestOption = items.slice().sort((a, b) => b.finalScore - a.finalScore)[0];
+      const bestOption = items
+        .slice()
+        .sort((a, b) => b.finalScore - a.finalScore)[0];
 
       const reasons: string[] = [];
 
       if (averageRoi >= 75) reasons.push("Strong ROI potential.");
-      if (averageAdmission >= 70) reasons.push("Admission chances are relatively healthy.");
-      if (averageCostLakhs <= 35) reasons.push("Average cost is comparatively manageable.");
-      if (country === "Canada") reasons.push("Balanced career, study, and long-term pathway.");
-      if (country === "Germany") reasons.push("Lower-cost options can improve overall affordability.");
-      if (country === "USA") reasons.push("High upside, but cost and visa planning need attention.");
+      if (averageAdmission >= 70)
+        reasons.push("Admission chances are relatively healthy.");
+      if (averageCostLakhs <= 35)
+        reasons.push("Average cost is comparatively manageable.");
+      if (country === "Canada")
+        reasons.push("Balanced career, study, and long-term pathway.");
+      if (country === "Germany")
+        reasons.push("Lower-cost options can improve overall affordability.");
+      if (country === "USA")
+        reasons.push("High upside, but cost and visa planning need attention.");
 
-      const label =
-        decisionScore >= 78
+      const label: CountryDecisionInsight["label"] =
+        decisionScore >= 75
           ? "Strong Fit"
-          : decisionScore >= 62
+          : decisionScore >= 60
           ? "Balanced Fit"
           : "Explore Carefully";
 
@@ -393,8 +451,9 @@ export function buildDecisionEngineResult(
   ).sort((a, b) => b.finalScore - a.finalScore);
 
   const selectedOption =
-    rankedOptions.find((option) => option.university.id === selectedUniversityId) ??
-    rankedOptions[0];
+    rankedOptions.find(
+      (option) => option.university.id === selectedUniversityId
+    ) ?? rankedOptions[0];
 
   const countryInsights = buildCountryInsights(rankedOptions);
 
@@ -408,21 +467,29 @@ export function buildDecisionEngineResult(
 
   const bestBy = {
     overall: rankedOptions[0].university.name,
-    roi: rankedOptions.slice().sort((a, b) => b.roiScore - a.roiScore)[0].university.name,
+    roi: rankedOptions.slice().sort((a, b) => b.roiScore - a.roiScore)[0]
+      .university.name,
     admission: rankedOptions
       .slice()
-      .sort((a, b) => b.admissionProbability - a.admissionProbability)[0].university.name,
+      .sort((a, b) => b.admissionProbability - a.admissionProbability)[0]
+      .university.name,
     affordability: rankedOptions
       .slice()
-      .sort((a, b) => b.affordabilityScore - a.affordabilityScore)[0].university.name,
+      .sort((a, b) => b.affordabilityScore - a.affordabilityScore)[0].university
+      .name,
     loan: rankedOptions
       .slice()
-      .sort((a, b) => b.loanReadinessScore - a.loanReadinessScore)[0].university.name,
+      .sort((a, b) => b.loanReadinessScore - a.loanReadinessScore)[0].university
+      .name,
   };
 
   const decisionSummary = `${selectedOption.university.name} currently has the strongest decision profile with ${selectedOption.finalScore}% final score. The engine combines admission probability, ROI, affordability, loan readiness, country fit, opportunity, and risk.`;
 
-  const whatIfSummary = `With CGPA ${profile.cgpa}, budget ₹${profile.budgetLakhs}L, English score ${profile.englishScore}, and ${profile.hasCoApplicant ? "co-applicant support" : "no co-applicant support"}, your strongest pathway is ${rankedOptions[0].university.country}.`;
+  const whatIfSummary = `With CGPA ${profile.cgpa}, budget ₹${
+    profile.budgetLakhs
+  }L, English score ${profile.englishScore}, and ${
+    profile.hasCoApplicant ? "co-applicant support" : "no co-applicant support"
+  }, your strongest pathway is ${rankedOptions[0].university.country}.`;
 
   const portfolioAdvice = [
     "Choose one best-overall option, two ROI-safe options, and two admission-safe options.",

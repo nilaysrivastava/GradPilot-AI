@@ -23,8 +23,8 @@ function createDemoSession(email: string): AuthSession {
   return {
     token: `demo-token-${Date.now()}`,
     user: {
-      id: "demo-user-shreya",
-      name: "Shreya",
+      id: "demo-user-nilay",
+      name: "Nilay",
       email,
     },
   } as AuthSession;
@@ -34,7 +34,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { session, login } = useAuthStore();
 
-  const [email, setEmail] = useState("shreya@gradpilot.ai");
+  const [email, setEmail] = useState("nilay@gradpilot.ai");
   const [password, setPassword] = useState("gradpilot123");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -83,7 +83,7 @@ export default function LoginPage() {
       }
 
       if (
-        cleanEmail === "shreya@gradpilot.ai" &&
+        cleanEmail === "nilay@gradpilot.ai" &&
         cleanPassword === "gradpilot123"
       ) {
         login(createDemoSession(cleanEmail));
@@ -94,7 +94,7 @@ export default function LoginPage() {
       setError(data.message || "Invalid email or password.");
     } catch {
       if (
-        cleanEmail === "shreya@gradpilot.ai" &&
+        cleanEmail === "nilay@gradpilot.ai" &&
         cleanPassword === "gradpilot123"
       ) {
         login(createDemoSession(cleanEmail));
@@ -193,7 +193,7 @@ export default function LoginPage() {
           <div className="mt-6 rounded-3xl bg-violet-50 p-5">
             <p className="font-semibold text-violet-700">Demo login</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              Email: shreya@gradpilot.ai
+              Email: nilay@gradpilot.ai
               <br />
               Password: gradpilot123
             </p>

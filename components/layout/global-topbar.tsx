@@ -88,8 +88,8 @@ export function GlobalTopbar({
   }
 
   return (
-    <header className="sticky top-0 z-[5000] w-full border-b border-violet-100 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-20 w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-4 z-[5000] mb-8 w-full px-3 sm:px-5 lg:px-2">
+      <div className="mx-auto flex h-16 w-full items-center justify-between gap-4 rounded-full border border-white/60 bg-white/55 px-4 shadow-[0_20px_70px_rgba(88,28,135,0.18)] ring-1 ring-violet-100/60 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/45 sm:px-5">
         <div className="flex min-w-0 items-center gap-3">
           {showMenuButton ? (
             <Button
@@ -97,34 +97,37 @@ export function GlobalTopbar({
               variant="outline"
               size="icon"
               onClick={onOpenSidebar}
-              className="rounded-2xl border-violet-100 bg-white"
+              className="size-10 rounded-full border-white/70 bg-white/60 shadow-sm backdrop-blur-xl hover:bg-white/80 lg:hidden"
             >
               <Menu className="size-5" />
             </Button>
           ) : null}
 
-          <Link href="/" className="flex min-w-0 items-center gap-3">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-blue-500 text-white shadow-glow">
+          <Link
+            href="/"
+            className="flex min-w-0 items-center gap-3 rounded-full pr-2 transition hover:opacity-90"
+          >
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-blue-500 text-white shadow-glow">
               <Sparkles className="size-5" />
             </div>
 
-            <div className="min-w-0">
-              <p className="truncate text-lg font-bold tracking-tight text-slate-950">
+            <div className="hidden min-w-0 sm:block">
+              <p className="truncate text-base font-bold tracking-tight text-slate-950">
                 GradPilot AI
               </p>
-              <p className="-mt-1 hidden truncate text-xs font-medium text-slate-500 sm:block">
+              <p className="-mt-1 truncate text-xs font-medium text-slate-500">
                 Student financing intelligence
               </p>
             </div>
           </Link>
 
-          <div className="ml-4 hidden h-8 w-px bg-violet-100 md:block" />
+          <div className="ml-2 hidden h-8 w-px bg-violet-100/80 xl:block" />
 
-          <div className="hidden min-w-0 md:block">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600">
+          <div className="hidden min-w-0 xl:block">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-violet-600">
               Workspace
             </p>
-            <h1 className="truncate text-xl font-semibold tracking-tight text-slate-950">
+            <h1 className="-mt-0.5 truncate text-base font-semibold tracking-tight text-slate-950">
               {pageTitle}
             </h1>
           </div>
@@ -136,7 +139,7 @@ export function GlobalTopbar({
               <Button
                 asChild
                 variant="outline"
-                className="hidden rounded-2xl border-violet-200 bg-white text-violet-700 hover:bg-violet-50 sm:inline-flex"
+                className="hidden h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80 sm:inline-flex"
               >
                 <Link href="/dashboard">
                   <LayoutDashboard className="mr-2 size-4" />
@@ -148,7 +151,7 @@ export function GlobalTopbar({
                 type="button"
                 onClick={handleLogout}
                 variant="outline"
-                className="hidden rounded-2xl border-violet-200 bg-white text-violet-700 hover:bg-violet-50 lg:inline-flex"
+                className="hidden h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80 lg:inline-flex"
               >
                 <LogOut className="mr-2 size-4" />
                 Logout
@@ -158,7 +161,7 @@ export function GlobalTopbar({
                 <button
                   type="button"
                   onClick={() => setIsProfileMenuOpen((current) => !current)}
-                  className="flex h-11 items-center gap-3 rounded-2xl border border-violet-100 bg-white px-2 pr-3 text-left transition hover:bg-violet-50"
+                  className="flex h-11 items-center gap-3 rounded-full border border-white/70 bg-white/60 px-2 pr-3 text-left shadow-sm backdrop-blur-xl transition hover:bg-white/80"
                 >
                   <Avatar className="size-8">
                     <AvatarFallback className="bg-violet-100 text-xs font-bold text-violet-700">
@@ -166,7 +169,7 @@ export function GlobalTopbar({
                     </AvatarFallback>
                   </Avatar>
 
-                  <div className="hidden max-w-36 text-left sm:block">
+                  <div className="hidden max-w-36 text-left md:block">
                     <p className="truncate text-sm font-semibold text-slate-950">
                       {session?.user.name}
                     </p>
@@ -183,8 +186,8 @@ export function GlobalTopbar({
                 </button>
 
                 {isProfileMenuOpen ? (
-                  <div className="absolute right-0 top-14 z-[99999] w-72 overflow-hidden rounded-2xl border border-violet-100 bg-white shadow-soft">
-                    <div className="border-b border-violet-100 p-4">
+                  <div className="absolute right-0 top-14 z-[99999] w-72 overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/80 shadow-[0_20px_70px_rgba(88,28,135,0.18)] backdrop-blur-2xl">
+                    <div className="border-b border-violet-100/80 bg-violet-50/60 p-4">
                       <p className="font-semibold text-slate-950">
                         {session?.user.name}
                       </p>
@@ -197,7 +200,7 @@ export function GlobalTopbar({
                       <Link
                         href="/profile"
                         onClick={() => setIsProfileMenuOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
+                        className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
                       >
                         <UserCircle className="size-4" />
                         Profile
@@ -206,7 +209,7 @@ export function GlobalTopbar({
                       <Link
                         href="/dashboard"
                         onClick={() => setIsProfileMenuOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
+                        className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
                       >
                         <LayoutDashboard className="size-4" />
                         Dashboard
@@ -215,7 +218,7 @@ export function GlobalTopbar({
                       <button
                         type="button"
                         onClick={handleLogout}
-                        className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50"
+                        className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50"
                       >
                         <LogOut className="size-4" />
                         Logout
@@ -230,7 +233,7 @@ export function GlobalTopbar({
               <Button
                 asChild
                 variant="outline"
-                className="rounded-2xl border-violet-200 bg-white text-violet-700 hover:bg-violet-50"
+                className="h-10 rounded-full border-violet-200 bg-white/60 px-4 text-violet-700 shadow-sm backdrop-blur-xl hover:bg-white/80"
               >
                 <Link href="/login">
                   <LogIn className="mr-2 size-4" />
@@ -238,7 +241,7 @@ export function GlobalTopbar({
                 </Link>
               </Button>
 
-              <Button asChild className="rounded-2xl shadow-glow">
+              <Button asChild className="h-10 rounded-full px-4 shadow-glow">
                 <Link href="/signup">Sign up</Link>
               </Button>
             </>

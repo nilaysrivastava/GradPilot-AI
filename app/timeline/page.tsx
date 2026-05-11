@@ -308,7 +308,6 @@ export default function TimelinePage() {
             </div>
 
             <div className="mt-6 rounded-3xl bg-slate-950 p-5 text-white">
-              <p className="font-semibold">Demo talking point</p>
               <p className="mt-2 text-sm leading-6 text-slate-300">
                 This timeline keeps users engaged after discovery. It creates
                 repeat visits through tasks, nudges, reminders, and financing

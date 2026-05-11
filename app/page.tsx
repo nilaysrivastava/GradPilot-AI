@@ -505,7 +505,7 @@ export default function HomePage() {
 
       <footer className="border-t border-slate-100 bg-white px-4 py-8 sm:px-6 lg:px-8">
         <div className="container-xl flex flex-col justify-between gap-4 text-sm text-slate-500 md:flex-row md:items-center">
-          <p>© 2026 GradPilot AI. Built for TenzorX AI Hackathon.</p>
+          <p>© 2026 GradPilot AI. Built with love 💜 by Team_Scoobaa.</p>
           <div className="flex gap-5">
             <a href="#platform" className="hover:text-violet-700">
               Platform

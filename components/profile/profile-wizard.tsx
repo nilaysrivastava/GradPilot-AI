@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   ArrowRight,
   BadgeIndianRupee,
@@ -71,6 +71,14 @@ const steps = [
 ];
 
 type StepId = (typeof steps)[number]["id"];
+
+function numberInputValue(value: number) {
+  return Number.isFinite(value) && value !== 0 ? String(value) : "";
+}
+
+function parseNumberInput(value: string) {
+  return value === "" ? 0 : Number(value);
+}
 
 export function ProfileWizard() {
   const session = useAuthStore((state) => state.session);
@@ -516,9 +524,9 @@ function AcademicStep({
         />
         <TextField
           label="Graduation year"
-          value={String(profile.graduationYear || "")}
+          value={numberInputValue(profile.graduationYear)}
           onChange={(value) =>
-            updateProfile("graduationYear", value ? Number(value) : 0)
+            updateProfile("graduationYear", parseNumberInput(value))
           }
           placeholder="2026"
         />
@@ -762,7 +770,7 @@ function StepHeader({
   title,
   description,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
 }) {
@@ -825,11 +833,11 @@ function NumberField({
       <Label>{label}</Label>
       <Input
         type="number"
-        value={Number.isNaN(value) ? "" : value}
+        value={numberInputValue(value)}
         min={min}
         max={max}
         step={step}
-        onChange={(event) => onChange(Number(event.target.value))}
+        onChange={(event) => onChange(parseNumberInput(event.target.value))}
         className="h-12 rounded-2xl"
       />
     </div>

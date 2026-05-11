@@ -374,8 +374,8 @@ export default function LoanEnginePage() {
             <div className="mt-6 rounded-3xl bg-slate-950 p-5 text-white">
               <p className="font-semibold">AI-assisted auto-fill</p>
               <p className="mt-2 text-sm leading-6 text-slate-300">
-                In the demo, explain that GradPilot can pre-fill loan
-                application fields from the Digital Twin, reducing friction and
+                GradPilot can pre-fill loan application fields 
+                from the Digital Twin, reducing friction and
                 improving conversion.
               </p>
 

@@ -2,6 +2,7 @@ import type { AuthSession, AuthUser } from "@/types";
 
 type StoredUser = AuthUser & {
   password: string;
+  createdAt: string;
 };
 
 type AuthDatabase = {
@@ -18,8 +19,8 @@ function createInitialDb(): AuthDatabase {
     users: [
       {
         id: "demo-user-1",
-        name: "Shreya",
-        email: "shreya@gradpilot.ai",
+        name: "Nilay",
+        email: "nilay@gradpilot.ai",
         password: "gradpilot123",
         createdAt: new Date().toISOString(),
       },
@@ -43,7 +44,6 @@ function sanitizeUser(user: StoredUser): AuthUser {
     id: user.id,
     name: user.name,
     email: user.email,
-    createdAt: user.createdAt,
   };
 }
 
@@ -167,6 +167,7 @@ export function getUserFromToken(token: string): AuthUser | null {
       db.users.push({
         ...decodedUser,
         password: "gradpilot123",
+        createdAt: new Date().toISOString(),
       });
     }
 

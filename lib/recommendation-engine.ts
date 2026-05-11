@@ -395,10 +395,10 @@ function buildCountryInsights(
         reasons.push("High career upside, but higher cost and visa risk.");
       }
 
-      const bestFitLabel =
-        countryScore >= 78
+      const bestFitLabel: CountryFitInsight["bestFitLabel"] =
+        countryScore >= 75
           ? "High Fit"
-          : countryScore >= 62
+          : countryScore >= 60
           ? "Balanced Fit"
           : "Emerging Fit";
 

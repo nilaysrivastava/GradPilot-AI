@@ -344,11 +344,11 @@ export default function CareerNavigatorPage() {
                 <TrendingUp className="size-6" />
               </div>
 
-              <p className="font-semibold">Prototype talking point</p>
+              
               <p className="mt-3 text-sm leading-6 text-slate-300">
-                In the demo, explain that this is the top-of-funnel AI
-                engagement layer. It keeps students coming back because every
-                recommendation changes when their Digital Twin changes.
+                This is the top-of-funnel AI engagement layer. It 
+                keeps students coming back because every recommendation 
+                changes when their Digital Twin changes.
               </p>
             </div>
           </div>
